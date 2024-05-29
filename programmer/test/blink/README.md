@@ -12,4 +12,6 @@ Build
 make
 ```
 
-Use `./out/blink.hex` for programming.
+Write Flash
+- use `./out/blink.hex`
+- my need to convert LF to CRLF for Windows Programmer
