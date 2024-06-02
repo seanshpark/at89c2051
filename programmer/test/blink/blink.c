@@ -10,34 +10,35 @@
 // - timer value = 65536 - 9216 = 56320 = 0xdc00
 inline void delay10ms(void)
 {
-    TMOD = 0x01;        // timer 0 mode 1
-    TH0 = 0xdc;         // for 10msec
-    TL0 = 0x00;
-    TR0 = 1;            // start
-    while (TF0 == 0) {  // check overflow
-        __asm
-            NOP
-        __endasm;
-    }
-    TR0 = 0;            // stop
-    TF0 = 0;            // clear overflow
+  TMOD = 0x01; // timer 0 mode 1
+  TH0 = 0xdc;  // for 10msec
+  TL0 = 0x00;
+  TR0 = 1; // start
+  while (TF0 == 0)
+  { // check overflow
+    __asm NOP __endasm;
+  }
+  TR0 = 0; // stop
+  TF0 = 0; // clear overflow
 }
 
 // delay in 10msec unit
 void delay10(int tmsec)
 {
-    int i;
-    for (i = 0; i < tmsec; ++i) {
-        delay10ms();
-    }
+  int i;
+  for (i = 0; i < tmsec; ++i)
+  {
+    delay10ms();
+  }
 }
 
 void main()
 {
-    while(1) {
-        LED = 1;
-        delay10(50);
-        LED = 0;
-        delay10(50);
-    }
+  while (1)
+  {
+    LED = 1;
+    delay10(50);
+    LED = 0;
+    delay10(50);
+  }
 }

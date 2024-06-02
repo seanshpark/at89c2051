@@ -1,0 +1,29 @@
+
+
+BUILD_OUTPUT=build/debug
+BUILD_INSTALL=build/install
+
+.PHONY: _prepare format
+
+all:
+	@echo "make cfg"
+	@echo "make debug"
+	@echo "make install"
+
+_prepare:
+	mkdir -p build
+	mkdir -p $(BUILD_OUTPUT)
+
+format:
+	bash tools/format
+
+cfg: _prepare
+	cmake -B$(BUILD_OUTPUT) -H./ \
+		-DCMAKE_BUILD_TYPE=debug \
+		-DCMAKE_INSTALL_PREFIX=${CURDIR}/${BUILD_INSTALL}
+
+debug:
+	cmake --build $(BUILD_OUTPUT)
+
+install:
+	cmake --build $(BUILD_OUTPUT) --target install
