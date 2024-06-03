@@ -17,6 +17,9 @@ _prepare:
 format:
 	bash tools/format
 
+clean:
+	rm -rf build/debug/*
+
 cfg: _prepare
 	cmake -B$(BUILD_OUTPUT) -H./ \
 		-DCMAKE_BUILD_TYPE=debug \

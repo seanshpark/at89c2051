@@ -6,3 +6,13 @@ Prerequisite
 ```
 sudo apt-get install clang-format-15
 ```
+
+## How to build
+
+```
+ln -s Makefile.me Makefile
+
+make cfg
+make debug
+make install
+```
