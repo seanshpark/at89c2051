@@ -4,11 +4,13 @@ set(LIB_FILES
 )
 
 add_library(x051rpictrl STATIC ${LIB_FILES})
+target_include_directories(x051rpictrl PUBLIC lib/gpio/include)
 target_include_directories(x051rpictrl PUBLIC lib/i2c/include)
 target_include_directories(x051rpictrl PUBLIC lib/mcp23017/include)
 
 set(SRC_FILES
     src/x051prg.cpp
+    src/programmer.cpp
 )
 
 add_executable(x051prg ${SRC_FILES})
