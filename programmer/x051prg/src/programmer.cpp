@@ -26,6 +26,9 @@ void Programmer::run(void)
   _i2c = new rpigpio2::I2C();
   _i2c->init(nullptr, _i2c_dev, _i2c_addr);
 
+  _mcp23017 = new rpigpio2::MCP23017();
+  _mcp23017->init(_i2c);
+
   switch (_action)
   {
     case Action::READ:
@@ -39,7 +42,13 @@ void Programmer::run(void)
       break;
   }
 
+  _mcp23017->release();
+  _i2c->release();
+
+  delete _mcp23017;
   delete _i2c;
+
+  _mcp23017 = nullptr;
   _i2c = nullptr;
 }
 

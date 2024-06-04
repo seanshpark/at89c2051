@@ -18,6 +18,7 @@
 #define __X051_PRG_PROGRAMMER_H__
 
 #include <i2c/i2c.h>
+#include <mcp23017/mcp23017.h>
 
 #include <iostream>
 #include <string>
@@ -73,6 +74,7 @@ private:
   std::string _action_file;
 
   rpigpio2::I2C *_i2c = nullptr;
+  rpigpio2::MCP23017 *_mcp23017 = nullptr;
 };
 
 } // namespace x051prg
