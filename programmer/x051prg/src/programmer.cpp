@@ -16,13 +16,16 @@
 
 #include "programmer.h"
 
-#include <i2c/i2c.h>
-
 namespace x051prg
 {
 
 void Programmer::run(void)
 {
+  std::cout << "x051prg, use /dev/i2c-" << _i2c_dev << ", address " << _i2c_addr << std::endl;
+
+  _i2c = new rpigpio2::I2C();
+  _i2c->init(nullptr, _i2c_dev, _i2c_addr);
+
   switch (_action)
   {
     case Action::READ:
@@ -35,6 +38,9 @@ void Programmer::run(void)
       act_write();
       break;
   }
+
+  delete _i2c;
+  _i2c = nullptr;
 }
 
 void Programmer::act_read(void)

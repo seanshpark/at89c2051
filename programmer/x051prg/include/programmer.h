@@ -17,6 +17,9 @@
 #ifndef __X051_PRG_PROGRAMMER_H__
 #define __X051_PRG_PROGRAMMER_H__
 
+#include <i2c/i2c.h>
+
+#include <iostream>
 #include <string>
 
 namespace x051prg
@@ -36,10 +39,13 @@ public:
   };
 
 public:
-  void i2c_addr(unsigned long addr) { _i2c_address = static_cast<uint8_t>(addr); };
-  unsigned long i2c_addr(void) const { return static_cast<unsigned long>(_i2c_address); }
+  void i2c_addr(int32_t addr) { _i2c_addr = addr; };
+  int32_t i2c_addr(void) const { return _i2c_addr; }
 
-  void rom_size(uint32_t size) { _x051_size = size; }
+  void i2c_dev(int32_t dev) { _i2c_dev = dev; };
+  int32_t i2c_dev(void) const { return _i2c_dev; }
+
+  void rom_size(int32_t size) { _x051_size = size; }
 
   void action(Action action, const std::string filename)
   {
@@ -60,10 +66,13 @@ private:
   void act_write(void);
 
 private:
-  uint8_t _i2c_address = 0x20;
-  uint32_t _x051_size = 2048;
+  int32_t _i2c_addr = 0x20;
+  int32_t _i2c_dev = 1;
+  int32_t _x051_size = 2048;
   Action _action;
   std::string _action_file;
+
+  rpigpio2::I2C *_i2c = nullptr;
 };
 
 } // namespace x051prg
