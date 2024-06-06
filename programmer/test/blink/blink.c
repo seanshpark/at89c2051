@@ -1,6 +1,6 @@
 #include <at89x051.h>
 
-#define LED P1_7
+#define LED P3_7
 
 // wait for 10msec with Timer0
 // - clock 11.0592MHz

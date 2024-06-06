@@ -38,6 +38,8 @@ testrd:
 	diff blink.bin test_read.bin
 
 testwr:
+	./$(BUILD_INSTALL)/bin/hex2bin ./programmer/test/blink/out/blink.hex
+	cp -v ./programmer/test/blink/out/blink.bin .
 	./$(BUILD_INSTALL)/bin/x051prg --write blink.bin
 
 tester:
