@@ -2,3 +2,5 @@
 /experiment
 Makefile
 format.patch
+*.bin
+*.hex

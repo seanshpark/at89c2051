@@ -30,3 +30,15 @@ debug:
 
 install:
 	cmake --build $(BUILD_OUTPUT) --target install
+
+# test
+testrd:
+	./$(BUILD_INSTALL)/bin/x051prg --read test_read.bin
+	hexdump -C test_read.bin
+	diff blink.bin test_read.bin
+
+testwr:
+	./$(BUILD_INSTALL)/bin/x051prg --write blink.bin
+
+tester:
+	./$(BUILD_INSTALL)/bin/x051prg --erase

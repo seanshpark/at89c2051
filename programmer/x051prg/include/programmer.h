@@ -22,6 +22,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 namespace x051prg
 {
@@ -65,6 +66,10 @@ private:
   void act_read(void);
   void act_erase(void);
   void act_write(void);
+
+  void inc_address(uint8_t gpb_data);
+  void save_bin(std::vector<uint8_t> &buffer);
+  bool load_bin(std::vector<uint8_t> &buffer);
 
 private:
   int32_t _i2c_addr = 0x20;
