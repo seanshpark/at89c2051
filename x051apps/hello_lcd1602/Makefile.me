@@ -5,10 +5,14 @@ HEX2BIN=../../build/install/bin/hex2bin
 OPTIONS=-V -mmcs51 --out-fmt-ihx --code-size 2048 --model-small -I../common
 
 all:
+	mkdir -p ../common/out
 	mkdir -p out
-	$(CC) $(OPTIONS) -c -o ./out/ ../common/delay.c
-	$(CC) $(OPTIONS) -c -o ./out/ ../common/lcd1602.c
-	$(CC) $(OPTIONS) -o out/hello_lcd1602.hex out/delay.rel out/lcd1602.rel hello_lcd1602.c 
+	$(CC) $(OPTIONS) -c -o ../common/out/ ../common/delay.c
+	$(CC) $(OPTIONS) -c -o ../common/out/ ../common/lcd1602.c
+	$(CC) $(OPTIONS) -o out/hello_lcd1602.hex \
+		../common/out/delay.rel \
+		../common/out/lcd1602.rel \
+		hello_lcd1602.c
 	$(HEX2BIN) out/hello_lcd1602.hex
 
 clean:
