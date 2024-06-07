@@ -31,9 +31,17 @@ debug:
 install:
 	cmake --build $(BUILD_OUTPUT) --target install
 
-# x051 programming
+apps:
+	cd x051apps/hello_lcd1602 && make -f Makefile.me
+
+# x051 erase PEROM
 erase:
 	./$(BUILD_INSTALL)/bin/x051prg --erase
+
+# flash x051
+# lcd1602 hello world
+pglcd1602:
+	./$(BUILD_INSTALL)/bin/x051prg --write x051apps/hello_lcd1602/out/hello_lcd1602.bin
 
 # test
 testrd:

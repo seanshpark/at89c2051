@@ -1,6 +1,6 @@
 /build
 /experiment
-Makefile
+/Makefile
 format.patch
 *.bin
 *.hex

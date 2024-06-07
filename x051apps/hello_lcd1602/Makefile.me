@@ -1,0 +1,15 @@
+CC=sdcc
+HEX2BIN=../../build/install/bin/hex2bin
+
+# code size 2K for 2051
+OPTIONS=-V -mmcs51 --out-fmt-ihx --code-size 2048 --model-small -I../common
+
+all:
+	mkdir -p out
+	$(CC) $(OPTIONS) -c -o ./out/ ../common/delay.c
+	$(CC) $(OPTIONS) -c -o ./out/ ../common/lcd1602.c
+	$(CC) $(OPTIONS) -o out/hello_lcd1602.hex out/delay.rel out/lcd1602.rel hello_lcd1602.c 
+	$(HEX2BIN) out/hello_lcd1602.hex
+
+clean:
+	rm -rf out/*
