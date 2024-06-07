@@ -128,7 +128,7 @@ void lcd1602_init(void)
   // init end
 }
 
-void lcd1602_display(int on, int cursor, int blink)
+void lcd1602_display(__bit on, __bit cursor, __bit blink)
 {
   uint8_t cmd;
   cmd = LCD1602_CMD_DISPLAY | LCD1602_DISPLAY_ON | LCD1602_DISPLAY_CUR | LCD1602_DISPLAY_BLINK;

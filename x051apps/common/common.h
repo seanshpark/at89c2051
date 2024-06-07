@@ -33,7 +33,7 @@ void delay10(uint8_t tmsec);
 void lcd1602_send_cmd(uint8_t cmd);
 void lcd1602_send_data(uint8_t data);
 void lcd1602_init(void);
-void lcd1602_display(int on, int cursor, int blink);
+void lcd1602_display(__bit on, __bit cursor, __bit blink);
 void lcd1602_clear(void);
 void lcd1602_putch(uint8_t ch);
 void lcd1602_puts(char *str);
