@@ -38,3 +38,18 @@ void lcd1602_clear(void);
 void lcd1602_putch(uint8_t ch);
 void lcd1602_puts(char *str);
 void lcd1602_move(uint8_t row, uint8_t col);
+
+//
+// i2c.c
+//
+void i2c_init(uint8_t addr);
+uint8_t i2c_write_byte(__bit send_start, __bit send_stop, uint8_t data);
+
+//
+// mcp23017.c
+//
+void mcp23017_init(uint8_t addr);
+void mcp23017_modeA(uint8_t iomode);
+void mcp23017_modeB(uint8_t iomode);
+void mcp23017_writeA(uint8_t data);
+void mcp23017_writeB(uint8_t data);
