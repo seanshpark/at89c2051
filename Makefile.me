@@ -35,6 +35,7 @@ apps:
 	cd x051apps/hello_lcd1602 && make -f Makefile.me
 	cd x051apps/hello_mcp23017 && make -f Makefile.me
 	cd x051apps/lcd1602_i2c && make -f Makefile.me
+	cd x051apps/hello_timer && make -f Makefile.me
 
 # x051 erase PEROM
 erase:
@@ -52,6 +53,10 @@ pgbk2301:
 # lcd1602-i2c
 pglcd16i2c:
 	./$(BUILD_INSTALL)/bin/x051prg --write x051apps/lcd1602_i2c/out/lcd1602_i2c.bin
+
+# hello_timer
+pgtimer:
+	./$(BUILD_INSTALL)/bin/x051prg --write x051apps/hello_timer/out/hello_timer.bin
 
 # test
 testrd:

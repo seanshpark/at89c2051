@@ -71,6 +71,18 @@ __endasm;
   // clang-format on
 }
 
+// - total = 1 + 2 * 249 + 2 = 501
+void delay500us(void)
+{
+  // clang-format off
+__asm
+  mov   r7, #249
+delay500us_repeat:
+  djnz  r7, delay500us_repeat
+__endasm;
+  // clang-format on
+}
+
 // wait for 10msec with Timer0
 // - clock 11.0592MHz
 // - timer clock input = 11.0592 / 12 = 0.9216

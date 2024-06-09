@@ -25,6 +25,7 @@ void delay10us(void);
 void delay50us(void);
 void delay100us(void);
 void delay200us(void);
+void delay500us(void);
 void delay10ms(void);
 void delay10(uint8_t tmsec);
 

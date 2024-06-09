@@ -1,0 +1,15 @@
+CC=sdcc
+HEX2BIN=../../build/install/bin/hex2bin
+
+# code size 2K for 2051
+OPTIONS=-V -mmcs51 --out-fmt-ihx --code-size 2048 --model-small
+
+all:
+	mkdir -p ../common/out
+	mkdir -p out
+	$(CC) $(OPTIONS) -o out/hello_timer.hex \
+		hello_timer.c
+	$(HEX2BIN) out/hello_timer.hex
+
+clean:
+	rm -rf out/*
