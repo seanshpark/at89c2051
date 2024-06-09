@@ -24,15 +24,18 @@
 #define MCP23017_OLATA 0x14 // A output latch
 #define MCP23017_OLATB 0x15 // B output latch
 
+static uint8_t _i2c_idx = 0;
+
 static void _send(uint8_t addr, uint8_t data)
 {
-  i2c_write_byte(1, 0, addr);
-  i2c_write_byte(0, 1, data);
+  i2c_write_byte(1, 0, addr, _i2c_idx);
+  i2c_write_byte(0, 1, data, _i2c_idx);
 }
 
-void mcp23017_init(uint8_t addr)
+void mcp23017_init(uint8_t idx, uint8_t addr)
 {
-  i2c_init(addr); //
+  _i2c_idx = idx;
+  i2c_init(idx, addr); //
 }
 
 void mcp23017_modeA(uint8_t iomode)

@@ -24,11 +24,12 @@ typedef unsigned char uint8_t;
 void delay10us(void);
 void delay50us(void);
 void delay100us(void);
+void delay200us(void);
 void delay10ms(void);
 void delay10(uint8_t tmsec);
 
 //
-// lcd1602.c
+// lcd1602_direct.c
 //
 void lcd1602_send_cmd(uint8_t cmd);
 void lcd1602_send_data(uint8_t data);
@@ -42,14 +43,24 @@ void lcd1602_move(uint8_t row, uint8_t col);
 //
 // i2c.c
 //
-void i2c_init(uint8_t addr);
-uint8_t i2c_write_byte(__bit send_start, __bit send_stop, uint8_t data);
+void i2c_init(uint8_t idx, uint8_t addr);
+uint8_t i2c_write_byte(__bit send_start, __bit send_stop, uint8_t data, uint8_t idx);
 
 //
 // mcp23017.c
 //
-void mcp23017_init(uint8_t addr);
+void mcp23017_init(uint8_t idx, uint8_t addr);
 void mcp23017_modeA(uint8_t iomode);
 void mcp23017_modeB(uint8_t iomode);
 void mcp23017_writeA(uint8_t data);
 void mcp23017_writeB(uint8_t data);
+
+//
+// lcd1602_i2c.c
+//
+void lcd1602_i2c_init(uint8_t idx, uint8_t addr);
+void lcd1602_i2c_display(__bit on, __bit cursor, __bit blink);
+void lcd1602_i2c_clear(void);
+void lcd1602_i2c_putch(uint8_t ch);
+void lcd1602_i2c_puts(char *str);
+void lcd1602_i2c_move(uint8_t row, uint8_t col);

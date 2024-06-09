@@ -34,6 +34,7 @@ install:
 apps:
 	cd x051apps/hello_lcd1602 && make -f Makefile.me
 	cd x051apps/hello_mcp23017 && make -f Makefile.me
+	cd x051apps/lcd1602_i2c && make -f Makefile.me
 
 # x051 erase PEROM
 erase:
@@ -47,6 +48,10 @@ pglcd1602:
 # mcp23017 hello blink
 pgbk2301:
 	./$(BUILD_INSTALL)/bin/x051prg --write x051apps/hello_mcp23017/out/hello_mcp23017.bin
+
+# lcd1602-i2c
+pglcd16i2c:
+	./$(BUILD_INSTALL)/bin/x051prg --write x051apps/lcd1602_i2c/out/lcd1602_i2c.bin
 
 # test
 testrd:

@@ -22,14 +22,14 @@
 #define I2C_RETRY 255
 
 static __bit _started;
-static uint8_t _addr;
+static uint8_t _addr[4];
 
-void i2c_init(uint8_t addr)
+void i2c_init(uint8_t idx, uint8_t addr)
 {
   PIN_SDA = 1;
   PIN_SCL = 1;
 
-  _addr = addr;
+  _addr[idx] = addr;
   _started = 0;
 }
 
@@ -126,7 +126,7 @@ static __bit read_bit(void)
 }
 */
 
-uint8_t i2c_write_byte(__bit send_start, __bit send_stop, uint8_t data)
+uint8_t i2c_write_byte(__bit send_start, __bit send_stop, uint8_t data, uint8_t idx)
 {
   uint8_t bit;
   uint8_t send;
@@ -138,7 +138,7 @@ uint8_t i2c_write_byte(__bit send_start, __bit send_stop, uint8_t data)
     _delay();
 
     // send 7bit addr, from MSB to LSB
-    send = _addr;
+    send = _addr[idx];
     send <<= 1;
     for (bit = 7; bit > 0; --bit)
     {

@@ -18,13 +18,28 @@
 
 #define BLINK_LED P3_7
 
+void message(uint8_t write)
+{
+  if (write)
+    lcd1602_i2c_puts("World!");
+  else
+    lcd1602_i2c_puts("Hello!");
+}
+
 void main()
 {
-  delay10(50);
+  delay10(10);
 
   mcp23017_init(0, 0x20);
   mcp23017_modeA(0b11111111); // A as read mode
   mcp23017_modeB(0b00000000); // B as write mode
+
+  lcd1602_i2c_init(1, 0x27);
+  lcd1602_i2c_display(1, 1, 1);
+  delay10(10);
+
+  uint8_t write = 0;
+  uint8_t clear = 3;
 
   while (1)
   {
@@ -35,5 +50,18 @@ void main()
     BLINK_LED = 0;
     mcp23017_writeB(0b00000000);
     delay10(50);
+
+    clear--;
+    if (clear == 0)
+    {
+      lcd1602_i2c_clear();
+      clear = 3;
+    }
+    else
+    {
+      lcd1602_i2c_move(write, 0);
+      message(write);
+      write = 1 - write;
+    }
   }
 }

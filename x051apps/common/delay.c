@@ -54,7 +54,19 @@ void delay100us(void)
 __asm
   mov   r7, #49
 delay100us_repeat:
-  djnz  r7, delay50us_repeat
+  djnz  r7, delay100us_repeat
+__endasm;
+  // clang-format on
+}
+
+// - total = 1 + 2 * 99 + 2 = 201
+void delay200us(void)
+{
+  // clang-format off
+__asm
+  mov   r7, #99
+delay200us_repeat:
+  djnz  r7, delay200us_repeat
 __endasm;
   // clang-format on
 }
