@@ -17,6 +17,7 @@
 #include <at89x051.h>
 
 typedef unsigned char uint8_t;
+typedef __bit uint1_t;
 
 //
 // delay.c

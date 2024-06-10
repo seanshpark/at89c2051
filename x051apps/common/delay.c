@@ -83,28 +83,10 @@ __endasm;
   // clang-format on
 }
 
-// wait for 10msec with Timer0
-// - clock 11.0592MHz
-// - timer clock input = 11.0592 / 12 = 0.9216
-// - for 1msec = 921.6 times
-// - for 10msec = 9216 times
-// - timer value = 65536 - 9216 = 56320 = 0xdc00
 void delay10ms(void)
 {
-  TMOD = 0x01; // timer 0 mode 1
-  TH0 = 0xdc;  // for 10msec
-  TL0 = 0x00;
-  TR0 = 1; // start
-  while (TF0 == 0)
-  { // check overflow
-    // clang-format off
-__asm
-    nop
-__endasm;
-    // clang-format on
-  }
-  TR0 = 0; // stop
-  TF0 = 0; // clear overflow
+  for (uint8_t i = 20; i > 0; i--)
+    delay500us();
 }
 
 // delay in 10msec unit
