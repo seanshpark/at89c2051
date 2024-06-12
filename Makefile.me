@@ -37,6 +37,7 @@ apps:
 	cd x051apps/lcd1602_i2c && make -f Makefile.me
 	cd x051apps/hello_timer && make -f Makefile.me
 	cd x051apps/hello_clock && make -f Makefile.me
+	cd x051apps/hello_switch && make -f Makefile.me
 
 # x051 erase PEROM
 erase:
@@ -62,6 +63,10 @@ pgtimer:
 # hello_clock
 pgclock:
 	./$(BUILD_INSTALL)/bin/x051prg --write x051apps/hello_clock/out/hello_clock.bin
+
+# hello_switch
+pgsw:
+	./$(BUILD_INSTALL)/bin/x051prg --write x051apps/hello_switch/out/hello_switch.bin
 
 # test
 testrd:
