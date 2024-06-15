@@ -18,7 +18,7 @@
 
 #define BLINK_LED P3_7
 
-uint8_t t_hour, t_min, t_sec, t_20;
+uint8_t t_hour, t_min, t_sec, t_20, t_20_d;
 uint8_t t_dn, t_up;
 uint8_t t_adj;
 
@@ -42,10 +42,14 @@ void int0_isr(void) __interrupt(0) __using(1)
 // timer 1 is int 3
 inline void timer1_clock(void)
 {
-  t_20++;
-  if (t_20 == 20)
+  ET1 = 0;
+  t_20 += t_20_d;
+  t_20_d = 0;
+  ET1 = 1;
+
+  if (t_20 >= 20)
   {
-    t_20 = 0;
+    t_20 -= 20;
     t_sec++;
     if (t_sec == 60)
     {
@@ -64,9 +68,9 @@ inline void timer1_clock(void)
 
 void timer1_isr(void) __interrupt(3) __using(2)
 {
+  TL1 = 0x09;
   TH1 = 0x4c; // for 50msec
-  TL1 = 0x00;
-  timer1_clock();
+  t_20_d++;
 }
 
 // 10msec with Timer1
@@ -79,8 +83,8 @@ void timer1_isr(void) __interrupt(3) __using(2)
 // - 50msec timer value = 65536 - 46080 = 19456 = 0x4c00
 void timer1_start(void)
 {
-  TH1 = 0x4c;
   TL1 = 0x00;
+  TH1 = 0x4c;
   TR1 = 1; // start
 }
 
@@ -145,6 +149,7 @@ void main()
   t_min = 0;
   t_sec = 0;
   t_20 = 0;
+  t_20_d = 0;
   timer1_start();
 
   str_hour[2] = ':';
@@ -152,6 +157,7 @@ void main()
 
   while (1)
   {
+    timer1_clock();
     {
       uint1_t led = (t_20 < 10) ? 1 : 0;
       BLINK_LED = led;
