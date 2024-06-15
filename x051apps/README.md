@@ -9,3 +9,19 @@ Simple LCD1602 "hello world" application
 Circuit
 
 <img src="src/hello_lcd1602/circuit_hello_lcd1602.png">
+
+## hello_timer
+
+Simple delay with Timer and LED blink
+
+## hello_mcp23017
+
+Software implementation of I2C + MCP23017 LED blink
+
+## hello_lcd1602_i2c
+
+Software implementation of I2C + LCD1602
+
+## hello_switch
+
+Rotary-encoder to INT0 to detect CW/CCW and print to LCD1602
