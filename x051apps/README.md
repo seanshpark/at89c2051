@@ -8,4 +8,4 @@ Simple LCD1602 "hello world" application
 
 Circuit
 
-<img src="hello_lcd1602/circuit_hello_lcd1602.png">
+<img src="src/hello_lcd1602/circuit_hello_lcd1602.png">

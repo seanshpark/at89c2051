@@ -1,0 +1,25 @@
+
+
+BUILD_OUTPUT=build/build
+BUILD_INSTALL=build/install
+
+.PHONY: _prepare format
+
+all: cfg bld install
+
+_prepare:
+	mkdir -p build
+	mkdir -p $(BUILD_OUTPUT)
+
+clean:
+	rm -rf build/build/*
+
+cfg: _prepare
+	cmake -B$(BUILD_OUTPUT) -H./ \
+		-DCMAKE_INSTALL_PREFIX=${CURDIR}/${BUILD_INSTALL}
+
+bld:
+	cmake --build $(BUILD_OUTPUT)
+
+install:
+	cmake --build $(BUILD_OUTPUT) --target install
