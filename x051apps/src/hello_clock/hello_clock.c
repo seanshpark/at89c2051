@@ -62,7 +62,7 @@ inline void timer1_clock(void)
   }
 }
 
-void timer1_isr(void) __interrupt(3) __using(1)
+void timer1_isr(void) __interrupt(3) __using(2)
 {
   TH1 = 0x4c; // for 50msec
   TL1 = 0x00;
@@ -128,8 +128,8 @@ void main()
   delay10(10);
 
   TMOD = 0x11; // timer 0/1: mode 1 (16bit mode)
-  PX0 = 1;     // high priority for Int0
-  PT0 = 1;     // high priority for Timer0
+  PX0 = 0;     // low priority for Int0
+  PT0 = 0;     // low priority for Timer0
   PT1 = 1;     // high priority for Timer1
   IT0 = 1;     // Int0 active falling edge
   EA = 1;      // enable interrupt
