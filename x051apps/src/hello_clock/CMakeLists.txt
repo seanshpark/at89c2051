@@ -1,7 +1,6 @@
 set(SRC_FILES
     ../common/delay.c
     ../common/i2c.c
-    ../common/mcp23017.c
     ../common/lcd1602_i2c.c
     hello_clock.c
     )

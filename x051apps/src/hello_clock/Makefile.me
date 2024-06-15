@@ -9,12 +9,10 @@ all:
 	mkdir -p out
 	$(CC) $(OPTIONS) -c -o ../common/out/ ../common/delay.c
 	$(CC) $(OPTIONS) -c -o ../common/out/ ../common/i2c.c
-	$(CC) $(OPTIONS) -c -o ../common/out/ ../common/mcp23017.c
 	$(CC) $(OPTIONS) -c -o ../common/out/ ../common/lcd1602_i2c.c
 	$(CC) $(OPTIONS) -o out/hello_clock.hex \
 		../common/out/delay.rel \
 		../common/out/i2c.rel \
-		../common/out/mcp23017.rel \
 		../common/out/lcd1602_i2c.rel \
 		hello_clock.c
 	$(HEX2BIN) out/hello_clock.hex

@@ -125,7 +125,7 @@ void lcd1602_i2c_init(uint8_t idx, uint8_t addr)
 void lcd1602_i2c_display(__bit on, __bit cursor, __bit blink)
 {
   uint8_t cmd;
-  cmd = LCD1602_CMD_DISPLAY | LCD1602_DISPLAY_ON | LCD1602_DISPLAY_CUR | LCD1602_DISPLAY_BLINK;
+  cmd = LCD1602_CMD_DISPLAY;
   cmd = cmd | (on ? LCD1602_DISPLAY_ON : 0);
   cmd = cmd | (cursor ? LCD1602_DISPLAY_CUR : 0);
   cmd = cmd | (blink ? LCD1602_DISPLAY_BLINK : 0);

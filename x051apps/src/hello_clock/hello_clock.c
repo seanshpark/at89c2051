@@ -18,15 +18,34 @@
 
 #define BLINK_LED P3_7
 
-uint8_t t_hour, t_min, t_sec, t_100;
+uint8_t t_hour, t_min, t_sec, t_20;
+uint8_t t_dn, t_up;
+uint8_t t_adj;
+
+enum
+{
+  TIME_ADJ_OFF = 0,
+  TIME_ADJ_HOUR = 1,
+  TIME_ADJ_MINUTE = 2,
+  TIME_ADJ_SEC = 3,
+  TIME_ADJ_END = 4,
+};
+
+void int0_isr(void) __interrupt(0) __using(1)
+{
+  if (P3_3)
+    t_dn++;
+  else
+    t_up++;
+}
 
 // timer 1 is int 3
-void timer1_clock(void)
+inline void timer1_clock(void)
 {
-  t_100++;
-  if (t_100 == 100)
+  t_20++;
+  if (t_20 == 20)
   {
-    t_100 = 0;
+    t_20 = 0;
     t_sec++;
     if (t_sec == 60)
     {
@@ -45,7 +64,7 @@ void timer1_clock(void)
 
 void timer1_isr(void) __interrupt(3) __using(1)
 {
-  TH1 = 0xdc; // for 10msec
+  TH1 = 0x4c; // for 50msec
   TL1 = 0x00;
   timer1_clock();
 }
@@ -55,12 +74,36 @@ void timer1_isr(void) __interrupt(3) __using(1)
 // - timer clock input = 11.0592 / 12 = 0.9216
 // - for 1msec = 921.6 times
 // - for 10msec = 9216 times
-// - timer value = 65536 - 9216 = 56320 = 0xdc00
+// - for 50msec = 46080 times
+// - 10msec timer value = 65536 - 9216 = 56320 = 0xdc00
+// - 50msec timer value = 65536 - 46080 = 19456 = 0x4c00
 void timer1_start(void)
 {
-  TH1 = 0xdc;
+  TH1 = 0x4c;
   TL1 = 0x00;
   TR1 = 1; // start
+}
+
+// return 1 when release switch
+uint1_t sw_p3_4(void)
+{
+  static uint1_t o_p3_4 = 0;
+  uint1_t ret = 0;
+  if (!o_p3_4 && P3_4)
+    ret = 1;
+  o_p3_4 = P3_4;
+  return ret;
+}
+
+// return 1 when release switch
+uint1_t sw_p3_5(void)
+{
+  static uint1_t o_p3_5 = 0;
+  uint1_t ret = 0;
+  if (!o_p3_5 && P3_5)
+    ret = 1;
+  o_p3_5 = P3_5;
+  return ret;
 }
 
 //  0 ~ 59 to "00 ~ 59"
@@ -80,23 +123,28 @@ void main()
 
   delay10(10);
 
-  mcp23017_init(0, 0x20);
-  mcp23017_modeA(0b11111111); // A as read mode
-  mcp23017_modeB(0b00000000); // B as write mode
-
   lcd1602_i2c_init(1, 0x27);
-  lcd1602_i2c_display(1, 1, 1);
+  lcd1602_i2c_display(1, 0, 0);
   delay10(10);
 
   TMOD = 0x11; // timer 0/1: mode 1 (16bit mode)
-  EA = 1;
-  ET1 = 1; // timer1 use interrupt
+  PX0 = 1;     // high priority for Int0
+  PT0 = 1;     // high priority for Timer0
+  PT1 = 1;     // high priority for Timer1
+  IT0 = 1;     // Int0 active falling edge
+  EA = 1;      // enable interrupt
+  ET1 = 1;     // timer1 use interrupt
+  EX0 = 1;     // Int0 use interrupt
+
+  t_adj = TIME_ADJ_OFF; // time adjust mode
+  t_dn = 0;
+  t_up = 0;
 
   b_sec = 100;
   t_hour = 22;
   t_min = 0;
   t_sec = 0;
-  t_100 = 0;
+  t_20 = 0;
   timer1_start();
 
   str_hour[2] = ':';
@@ -104,10 +152,36 @@ void main()
 
   while (1)
   {
-    uint1_t led = (t_100 < 50) ? 1 : 0;
-    uint8_t wb = led ? 0b11111111 : 0b00000000;
-    BLINK_LED = led;
-    mcp23017_writeB(wb);
+    {
+      uint1_t led = (t_20 < 10) ? 1 : 0;
+      BLINK_LED = led;
+    }
+    EX0 = 0;
+    if (t_adj && (t_dn || t_up))
+    {
+      uint8_t b_dn = t_dn;
+      uint8_t b_up = t_up;
+
+      t_dn = 0;
+      t_up = 0;
+
+      if (t_adj == TIME_ADJ_HOUR)
+      {
+        t_hour += b_up + 24 - b_dn;
+        t_hour %= 24;
+      }
+      else if (t_adj == TIME_ADJ_MINUTE)
+      {
+        t_min += b_up + 60 - b_dn;
+        t_min %= 60;
+      }
+      else if (t_adj == TIME_ADJ_SEC)
+      {
+        t_sec += b_up + 60 - b_dn;
+        t_sec %= 60;
+      }
+    }
+    EX0 = 1;
 
     if (b_sec != t_sec)
     {
@@ -117,6 +191,38 @@ void main()
       num2asii(t_sec, &str_hour[6]);
       lcd1602_i2c_move(0, 0);
       lcd1602_i2c_puts(str_hour);
+
+      uint8_t xpos = 0;
+      switch (t_adj)
+      {
+        case TIME_ADJ_HOUR:
+          xpos = 1;
+          break;
+        case TIME_ADJ_MINUTE:
+          xpos = 4;
+          break;
+        case TIME_ADJ_SEC:
+          xpos = 7;
+          break;
+      }
+      if (xpos)
+        lcd1602_i2c_move(0, xpos);
+    }
+
+    if (sw_p3_4())
+    {
+      t_dn = 0;
+      t_up = 0;
+      t_adj = (++t_adj) % TIME_ADJ_END;
+      switch (t_adj)
+      {
+        case TIME_ADJ_OFF:
+          lcd1602_i2c_display(1, 0, 0);
+          break;
+        case TIME_ADJ_HOUR:
+          lcd1602_i2c_display(1, 1, 1);
+          break;
+      }
     }
   }
 }
