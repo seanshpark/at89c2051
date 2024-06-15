@@ -8,3 +8,5 @@ Connection
 - MCP23017 PortB -> Control signals
 
 <img src="circuit/programmer_circuit.png">
+
+<img src='circuit/at89c2051_programmer_breadboard.png'>
