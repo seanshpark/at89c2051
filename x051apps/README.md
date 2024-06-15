@@ -25,3 +25,7 @@ Software implementation of I2C + LCD1602
 ## hello_switch
 
 Rotary-encoder to INT0 to detect CW/CCW and print to LCD1602
+
+Circuit with x051 + Rotary-encoder + LCD1602 on bread-board
+
+<img src="src/hello_switch/at89c2051_rotenc_lcd1602_bb.png">
