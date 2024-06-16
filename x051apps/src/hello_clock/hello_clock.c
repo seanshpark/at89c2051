@@ -68,7 +68,7 @@ inline void timer1_clock(void)
 
 void timer1_isr(void) __interrupt(3) __using(2)
 {
-  TL1 = 0x09;
+  TL1 = 0x08;
   TH1 = 0x4c; // for 50msec
   t_20_d++;
 }
