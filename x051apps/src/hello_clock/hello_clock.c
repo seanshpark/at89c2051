@@ -21,6 +21,7 @@
 uint8_t t_hour, t_min, t_sec, t_20, t_20_d;
 uint8_t t_dn, t_up;
 uint8_t t_adj;
+uint16_t t_tick_adj;
 
 enum
 {
@@ -39,13 +40,30 @@ void int0_isr(void) __interrupt(0) __using(1)
     t_up++;
 }
 
-// timer 1 is int 3
 inline void timer1_clock(void)
 {
-  ET1 = 0;
-  t_20 += t_20_d;
-  t_20_d = 0;
-  ET1 = 1;
+  {
+    uint8_t t20d;
+    if (!t_20_d)
+      return;
+
+    EA = 0;
+    t20d = t_20_d;
+    t_20_d = 0;
+    EA = 1;
+
+    t_20 += t20d;
+
+    {
+      const uint16_t ta = 30000;
+      t_tick_adj += t20d;
+      if (t_tick_adj >= ta && t_20 > 0)
+      {
+        t_tick_adj -= ta;
+        t_20--;
+      }
+    }
+  }
 
   if (t_20 >= 20)
   {
@@ -66,9 +84,10 @@ inline void timer1_clock(void)
   }
 }
 
+// timer 1 is int 3
 void timer1_isr(void) __interrupt(3) __using(2)
 {
-  TL1 = 0x08;
+  TL1 = 0x09;
   TH1 = 0x4c; // for 50msec
   t_20_d++;
 }
@@ -144,6 +163,7 @@ void main()
   t_dn = 0;
   t_up = 0;
 
+  t_tick_adj = 0;
   b_sec = 100;
   t_hour = 22;
   t_min = 0;
